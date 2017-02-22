@@ -68,6 +68,9 @@
         <div class="detail-close">
           <span @click="showDetail()" class="icon-close"></span>
         </div>
+        <div class="mark">
+          <img src="" alt="">
+        </div>
       </div>
     </transition>
   </div>
@@ -248,7 +251,7 @@
       width: 100%;
       height: 100%;
       overflow: auto;
-      background: rgba(7, 17, 27, .8);
+
       .detail-wrapper {
         min-height: 90%;
         .detail-main {
@@ -281,8 +284,7 @@
             .item-main {
               margin: rem(48px) rem(96px) 0 rem(96px);
               .special {
-                font-size:0;
-                line-height:rem(46px);
+                line-height: rem(46px);
                 .icon {
                   display: inline-block;
                   width: rem(32px);
@@ -307,15 +309,16 @@
                 }
                 .text {
                   margin-left: rem(12px);
-                  font-size: rem(24px);
                   vertical-align: middle;
+                  font-size: rem(24px);
+                  font-weight: 200;
                 }
               }
               .bulletin {
-                p{
-                  line-height:rem(48px);
-                  font-size:rem(24px);
-                  font-weight:200;
+                p {
+                  line-height: rem(48px);
+                  font-size: rem(24px);
+                  font-weight: 200;
                 }
               }
             }
@@ -328,6 +331,18 @@
         height: rem(64px);
         font-size: rem(64px);
         margin: -(rem(128px)) auto 0 auto;
+      }
+      .mark {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: -1;
+        filter: blur(10px);
+        -webkit-filter: blur(10px);
+        background: rgba(7, 17, 27, .8);
       }
     }
   }

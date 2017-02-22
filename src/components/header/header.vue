@@ -36,40 +36,29 @@
             <div class="sell-ratings">
               <stars :size="48" :score="seller.score"></stars>
             </div>
-            <div class="item-detail">
-              <div class="item-title">
-                <span></span>
-                <h2>优惠信息</h2>
-                <span></span>
-              </div>
-              <div class="item-main">
-                <div class="special" v-for="support in seller.supports">
-                  <span class="icon" :class="classMap[support.type]"></span>
-                  <span class="text">{{support.description}}</span>
-                </div>
-              </div>
+            <div class="title">
+              <div class="line"></div>
+              <div class="text">优惠信息</div>
+              <div class="line"></div>
             </div>
-            <div class="item-detail">
-              <div class="item-title">
-                <span></span>
-                <h2>商家公告</h2>
-                <span></span>
-              </div>
-              <div class="item-main">
-                <div class="bulletin">
-                  <p>
-                    {{seller.bulletin}}
-                  </p>
-                </div>
-              </div>
+            <ul v-if="seller.supports" class="supports">
+              <li class="support-item" v-for="item in seller.supports">
+                <span class="icon" :class="classMap[item.type]"></span>
+                <span class="text">{{item.description}}</span>
+              </li>
+            </ul>
+            <div class="title">
+              <div class="line"></div>
+              <div class="text">商家公告</div>
+              <div class="line"></div>
+            </div>
+            <div class="bulletin">
+              <p class="content">{{seller.bulletin}}</p>
             </div>
           </div>
         </div>
         <div class="detail-close">
           <span @click="showDetail()" class="icon-close"></span>
-        </div>
-        <div class="mark">
-          <img src="" alt="">
         </div>
       </div>
     </transition>
@@ -251,7 +240,7 @@
       width: 100%;
       height: 100%;
       overflow: auto;
-
+      background: rgba(7, 17, 27, .8);
       .detail-wrapper {
         min-height: 90%;
         .detail-main {
@@ -264,63 +253,73 @@
             line-height: rem(32px);
             text-align: center;
           }
-          .item-detail {
-            .item-title {
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              margin-top: rem(56px);
-              font-size: rem(30px);
-              h2 {
-                padding: 0 rem(24px);
-                font-size: rem(30px);
+          .sell-ratings {
+            margin-top:rem(32px);
+            text-align: center;
+          }
+          .title{
+            display: flex;
+            width:80%;
+            margin:rem(56px) auto rem(48px) auto;
+            .line{
+              flex:1;
+              position:relative;
+              top:rem(-12px);
+              border-bottom:1px solid rgba(255,255,255,.2);
+            }
+            .text{
+              font-size:rem(30px);
+              padding:0 rem(24px);
+            }
+          }
+          .supports{
+            width:80%;
+            margin:0 auto;
+            .support-item{
+              padding:0 rem(24px);
+              font-size:0;
+              margin-bottom:rem(24px);
+              &:last-child{
+                margin-bottom:0;
               }
-              span {
-                width: rem(244px);
-                height: 3px;
-                background-color: rgba(255, 255, 255, .2);
+              .icon{
+                display: inline-block;
+                width:rem(32px);
+                height:rem(32px);
+                vertical-align: top;
+                margin-right:rem(12px);
+                background-size:100%;
+                &.decrease {
+                  @include bg-images("decrease_1");
+                }
+                &.discount {
+                  @include bg-images("discount_1");
+                }
+                &.guarantee {
+                  @include bg-images("guarantee_1");
+                }
+                &.invoice {
+                  @include bg-images("invoice_1");
+                }
+                &.special {
+                  @include bg-images("special_1");
+                }
+              }
+              .text{
+                font-size:rem(24px);
+                line-height:rem(24px);
+                font-weight:200;
               }
             }
-            .item-main {
-              margin: rem(48px) rem(96px) 0 rem(96px);
-              .special {
-                line-height: rem(46px);
-                .icon {
-                  display: inline-block;
-                  width: rem(32px);
-                  height: rem(32px);
-                  vertical-align: middle;
-                  &.decrease {
-                    @include bg-images("decrease_2");
-                  }
-                  &.discount {
-                    @include bg-images("discount_2");
-                  }
-                  &.guarantee {
-                    @include bg-images("guarantee_2");
-                  }
-                  &.invoice {
-                    @include bg-images("invoice_2");
-                  }
-                  &.special {
-                    @include bg-images("special_2");
-                  }
-                  background-size: cover;
-                }
-                .text {
-                  margin-left: rem(12px);
-                  vertical-align: middle;
-                  font-size: rem(24px);
-                  font-weight: 200;
-                }
-              }
-              .bulletin {
-                p {
-                  line-height: rem(48px);
-                  font-size: rem(24px);
-                  font-weight: 200;
-                }
-              }
+          }
+          .bulletin{
+            width:80%;
+            margin:0 auto;
+            .content{
+              padding:0 rem(24px);
+              font-size:rem(24px);
+              line-height:rem(48px);
+              font-weight:200;
             }
           }
         }
@@ -331,18 +330,6 @@
         height: rem(64px);
         font-size: rem(64px);
         margin: -(rem(128px)) auto 0 auto;
-      }
-      .mark {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        z-index: -1;
-        filter: blur(10px);
-        -webkit-filter: blur(10px);
-        background: rgba(7, 17, 27, .8);
       }
     }
   }

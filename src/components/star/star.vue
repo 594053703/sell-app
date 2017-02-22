@@ -50,8 +50,6 @@
 
   .star {
     font-size: 0;
-    margin-top:rem(56px);
-    text-align: center;
     .star-item {
       display: inline-block;
       background-repeat: no-repeat;
@@ -79,7 +77,6 @@
         height: rem(30px);
         margin-right: rem(12px);
         background-size: rem(30px) rem(30px);
-        margin-right: 0;
         &.on {
           @include bg-images('star36_on')
         }
@@ -97,7 +94,6 @@
         height: rem(20px);
         margin-right: rem(6px);
         background-size: rem(20px) rem(20px);
-        margin-right: 0;
         &.on {
           @include bg-images('star24_on')
         }

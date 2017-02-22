@@ -15,11 +15,12 @@
         <div v-if="seller.supports" class="supports">
           <span class="icon" :class="classMap[seller.supports[0].type]"></span>
           <span class="text">{{seller.supports[0].description}}</span>
-          <span class="more-supports">{{seller.supports.length}}个<i class="icon-keyboard_arrow_right"></i></span>
+          <span @click="showDetail()" class="more-supports">{{seller.supports.length}}个<i
+            class="icon-keyboard_arrow_right"></i></span>
         </div>
       </div>
     </div>
-    <div class="bulletin-wrapper">
+    <div class="bulletin-wrapper" @click="showDetail()">
       <span class="bulletin"></span>
       <span class="text">{{seller.bulletin}}</span>
       <span class="icon"> > </span>
@@ -27,31 +28,71 @@
     <div class="background">
       <img :src="seller.avatar" alt="">
     </div>
-    <div v-show="showDetail" class="detail">
-      <div class="detail-wrapper">
-        <div class="detail-main">
-          <h1 class="name">{{seller.name}}</h1>
+    <transition name="fade">
+      <div class="detail" v-show="isShowDetail">
+        <div class="detail-wrapper">
+          <div class="detail-main">
+            <h1 class="name">{{seller.name}}</h1>
+            <div class="sell-ratings">
+              <stars :size="48" :score="seller.score"></stars>
+            </div>
+            <div class="item-detail">
+              <div class="item-title">
+                <span></span>
+                <h2>优惠信息</h2>
+                <span></span>
+              </div>
+              <div class="item-main">
+                <div class="special" v-for="support in seller.supports">
+                  <span class="icon" :class="classMap[support.type]"></span>
+                  <span class="text">{{support.description}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="item-detail">
+              <div class="item-title">
+                <span></span>
+                <h2>商家公告</h2>
+                <span></span>
+              </div>
+              <div class="item-main">
+                <div class="bulletin">
+                  <p>
+                    {{seller.bulletin}}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="detail-close">
+          <span @click="showDetail()" class="icon-close"></span>
         </div>
       </div>
-      <div class="detail-close">
-        <span class="icon-close"></span>
-      </div>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import stars from 'components/star/star';
   export default {
     props: {
       seller: {
         type: Object
       }
     },
+    methods: {
+      showDetail () {
+        this.isShowDetail = !this.isShowDetail;
+      }
+    },
     data () {
       return {
-        type: 'decrease',
-        showDetail: false
+        isShowDetail: false
       };
+    },
+    components: {
+      stars
     },
     created () {
       this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special'];
@@ -220,6 +261,65 @@
             line-height: rem(32px);
             text-align: center;
           }
+          .item-detail {
+            .item-title {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              margin-top: rem(56px);
+              font-size: rem(30px);
+              h2 {
+                padding: 0 rem(24px);
+                font-size: rem(30px);
+              }
+              span {
+                width: rem(244px);
+                height: 3px;
+                background-color: rgba(255, 255, 255, .2);
+              }
+            }
+            .item-main {
+              margin: rem(48px) rem(96px) 0 rem(96px);
+              .special {
+                font-size:0;
+                line-height:rem(46px);
+                .icon {
+                  display: inline-block;
+                  width: rem(32px);
+                  height: rem(32px);
+                  vertical-align: middle;
+                  &.decrease {
+                    @include bg-images("decrease_2");
+                  }
+                  &.discount {
+                    @include bg-images("discount_2");
+                  }
+                  &.guarantee {
+                    @include bg-images("guarantee_2");
+                  }
+                  &.invoice {
+                    @include bg-images("invoice_2");
+                  }
+                  &.special {
+                    @include bg-images("special_2");
+                  }
+                  background-size: cover;
+                }
+                .text {
+                  margin-left: rem(12px);
+                  font-size: rem(24px);
+                  vertical-align: middle;
+                }
+              }
+              .bulletin {
+                p{
+                  line-height:rem(48px);
+                  font-size:rem(24px);
+                  font-weight:200;
+                }
+              }
+            }
+          }
         }
       }
       .detail-close {
@@ -231,4 +331,13 @@
       }
     }
   }
+
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
+  }
+
+  .fade-enter, .fade-leave-active {
+    opacity: 0
+  }
+
 </style>

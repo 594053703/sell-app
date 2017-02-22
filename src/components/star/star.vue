@@ -6,9 +6,9 @@
 
 <script type="text/ecmascript-6">
   const length = 5;
-  const cls_on = 'on';
-  const cls_half = 'half';
-  const cls_off = 'off';
+  const clsOn = 'on';
+  const clsHalf = 'half';
+  const clsOff = 'off';
   export default {
     props: {
       size: {
@@ -28,18 +28,18 @@
         let hasDecimal = score % 1 !== 0;
         let integer = Math.floor(score);
         for (let i = 0; i < integer; i++) {
-          result.push(cls_on);
+          result.push(clsOn);
         }
         if (hasDecimal) {
-          result.push(cls_half);
+          result.push(clsHalf);
         }
         while (result.length < length) {
-          result.push(cls_off);
+          result.push(clsOff);
         }
         return result;
       }
     },
-    data(){
+    data () {
       return {};
     }
   };
@@ -50,6 +50,8 @@
 
   .star {
     font-size: 0;
+    margin-top:rem(56px);
+    text-align: center;
     .star-item {
       display: inline-block;
       background-repeat: no-repeat;
@@ -60,17 +62,14 @@
         height: rem(40px);
         margin-right: rem(44px);
         background-size: rem(40px) rem(40px);
-        &:last-child {
-          margin-right: 0;
-          &.on {
-            @include bg-images('star48_on')
-          }
-          &.half {
-            @include bg-images('star48_half')
-          }
-          &.off {
-            @include bg-images('star48_off')
-          }
+        &.on {
+          @include bg-images('star48_on')
+        }
+        &.half {
+          @include bg-images('star48_half')
+        }
+        &.off {
+          @include bg-images('star48_off')
         }
       }
     }
@@ -80,17 +79,15 @@
         height: rem(30px);
         margin-right: rem(12px);
         background-size: rem(30px) rem(30px);
-        &:last-child {
-          margin-right: 0;
-          &.on {
-            @include bg-images('star36_on')
-          }
-          &.half {
-            @include bg-images('star36_half')
-          }
-          &.off {
-            @include bg-images('star36_off')
-          }
+        margin-right: 0;
+        &.on {
+          @include bg-images('star36_on')
+        }
+        &.half {
+          @include bg-images('star36_half')
+        }
+        &.off {
+          @include bg-images('star36_off')
         }
       }
     }
@@ -100,17 +97,15 @@
         height: rem(20px);
         margin-right: rem(6px);
         background-size: rem(20px) rem(20px);
-        &:last-child {
-          margin-right: 0;
-          &.on {
-            @include bg-images('star24_on')
-          }
-          &.half {
-            @include bg-images('star24_half')
-          }
-          &.off {
-            @include bg-images('star24_off')
-          }
+        margin-right: 0;
+        &.on {
+          @include bg-images('star24_on')
+        }
+        &.half {
+          @include bg-images('star24_half')
+        }
+        &.off {
+          @include bg-images('star24_off')
         }
       }
     }

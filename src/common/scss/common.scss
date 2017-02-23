@@ -1,6 +1,6 @@
 $default-font-size: 75px;
 body,html{
-  font-family: "PingFang SC","STHeitiSC-Light","Helvetical-Light",Arial,sans-serif;
+  font-family: Helvetica Neue,Tahoma,Arial,PingFangSC-Regular,Hiragino Sans GB,Microsoft Yahei,sans-serif;
 }
 @mixin font-dpr($font-size) {
   font-size: $font-size;

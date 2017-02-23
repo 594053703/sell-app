@@ -1,72 +1,73 @@
 <template>
-  <div class="goods-wrapper">
-    <div class="main-box" :style="mainViewStyle">
-      <div class="main">
-        <div class="main-menu-box">
-          <ul class="main-menu">
-            <li v-for="item in goodsLists" class="menu-item">
-              <span></span>
-              <span>{{item.name}}</span>
+  <div class="goods">
+    <div class="menu-wrapper" ref="menuWrapper">
+      <ul>
+        <li class="menu-item" v-for="item in goods">
+          <span class="text">
+            <span v-show="item.type>0" :class="classMap[item.type]" class="icon"></span>{{item.name}}
+          </span>
+        </li>
+      </ul>
+    </div>
+    <div class="foods-wrapper" ref="foodsWrapper">
+      <ul>
+        <li v-for="item in goods" class="food-list">
+          <h1 class="title">{{item.name}}</h1>
+          <ul>
+            <li v-for="food in item.foods" class="food-item">
+              <div class="icon">
+                <img :src="food.icon" alt="">
+              </div>
+              <div class="content">
+                <h2 class="name">{{food.name}}</h2>
+                <p class="desc">{{food.description}}</p>
+                <div class="extra">
+                  <span class="count">月售{{food.sellCount}}份</span>
+                  <span>好评率{{food.rating}}%</span>
+                </div>
+                <div class="price">
+                  <span class="now">¥{{food.price}}</span>
+                  <span class="old" v-show="food.oldPrice">¥{{food.oldPrice}}</span>
+                </div>
+              </div>
             </li>
           </ul>
-        </div>
-        <section class="main-views">
-          <div v-for="good in goodsLists" class="menu-class">
-            <div class="good-title">{{good.name}}</div>
-            <ul class="food-list">
-              <li class="food-wrapper" v-for="food in good.foods">
-                <div class="food-pic"><img :src="food.icon" alt=""></div>
-                <section class="food-text">
-                  <div class="title">{{food.name}}</div>
-                  <div class="text" v-if="food.description">{{food.description}}</div>
-                  <div class="text">
-                    <span>月售{{food.sellCount}}</span>
-                    <span>好评率{{food.rating}}%</span>
-                  </div>
-                  <div class="price">
-                    <strong class="now-price">￥{{food.price}}</strong>
-                    <strong class="old-price" v-if="food.oldPrice">￥{{food.oldPrice}}</strong>
-                  </div>
-                </section>
-              </li>
-            </ul>
-          </div>
-        </section>
-      </div>
+        </li>
+      </ul>
     </div>
-    <div></div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import BScroll from 'better-scroll';
   export default {
     data () {
       return {
-        goodsLists: [],
-        mainViewStyle: {
-          height: ''
-        }
+        goods: []
       };
     },
     created () {
-      this.getGoodsLists();
+      this.getGoods();
+      this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special'];
     },
     mounted () {
-      this.mainViewHeight();
     },
     methods: {
-      getGoodsLists () {
+      getGoods () {
         this.$http.get('/api/goods').then((res) => {
-          this.goodsLists = res.data.data;
-          console.log(this.goodsLists);
+          this.goods = res.data.data;
+          this.$nextTick(() => {
+            this._initScroll();
+          });
         }).catch((err) => {
           console.log(err);
         });
       },
-      mainViewHeight () {
-        let h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-        this.mainViewStyle.height = h - this.$el.offsetTop + 'px';
-        console.log(this.mainViewStyle);
+      _initScroll () {
+        console.log(this.$refs);
+        console.log(this.$refs.foodsWrapper);
+        this.menuScroll = new BScroll(this.$refs.menuWrapper, {});
+        this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {});
       }
     }
   };
@@ -75,108 +76,112 @@
 <style lang="scss" rel="stylesheet/scss">
   @import "../../common/scss/common";
 
-  .goods-wrapper {
-    .main-box {
-      box-sizing: border-box;
-      padding-bottom: rem(116px);
-      .main {
-        display: flex;
-        width: 100%;
-        height: 100%;
-        .main-menu-box{
-          height:100%;
-          width: rem(150px);
-          overflow: hidden;
-          padding:0 rem(5px);
-          .main-menu {
-            box-sizing: border-box;
-            width: rem(160px);
-            padding:0  rem(24px);
-            background: #f3f5f7;
-            height: 100%;
-            overflow-y: auto;
-            overflow-x:hidden;
-            .menu-item {
-              box-sizing: border-box;
-              width:100%;
-              padding: rem(42px) 0;
-              line-height: rem(28px);
-              text-align: center;
-              color: rgb(20, 20, 20);
-              font-size:rem(24px);
-              border-bottom:1px solid rgba(7,17,27,.2);
-            }
+  .goods {
+    display: flex;
+    position: absolute;
+    top: rem(349px);
+    bottom: rem(92px);
+    width: 100%;
+    overflow: hidden;
+    .menu-wrapper {
+      flex: 0 0 rem(160px);
+      width: rem(160px);
+      background: #f3f5f7;
+      .menu-item {
+        display: table;
+        height: rem(108px);
+        .icon {
+          display: inline-block;
+          width: rem(24px);
+          height: rem(24px);
+          margin-right: 4px;
+          background-size: rem(24px) rem(24px);
+          background-repeat: no-repeat;
+          vertical-align: middle;
+          &.decrease {
+            @include bg-images("decrease_3");
+          }
+          &.discount {
+            @include bg-images("discount_3");
+          }
+          &.guarantee {
+            @include bg-images("guarantee_3");
+          }
+          &.invoice {
+            @include bg-images("invoice_3");
+          }
+          &.special {
+            @include bg-images("special_3");
           }
         }
-        .main-views {
+        .text {
+          display: table-cell;
+          width: rem(112px);
+          vertical-align: middle;
+          font-size: rem(24px);
+          padding: 0 rem(24px);
+          border-bottom: 1px solid rgba(7, 17, 27, .1);
+          text-align: center;
+        }
+      }
+    }
+    .foods-wrapper {
+      flex: 1;
+      .title {
+        padding-left: rem(28px);
+        height: rem(52px);
+        line-height: rem(52px);
+        font-size: rem(28px);
+        color: rgb(147, 153, 159);
+        background: #f3f5f7;
+        border-left: 2px solid #d9dde1;
+      }
+      .food-item {
+        display: flex;
+        margin: rem(32px);
+        border-bottom: 1px solid rgba(7, 17, 27, .1);
+        padding-bottom: rem(32px);
+        &:last-child {
+          margin-bottom: 0;
+        }
+        .icon {
+          flex: 0 0 rem(114px);
+          margin-right: rem(20px);
+        }
+        .content {
           flex: 1;
-          height: 100%;
-          overflow-y: auto;
-          .menu-class {
-            .good-title {
-              font-size:rem(24px);
-              line-height:52px;
-              color:rgb(147,153,159);
-              background:#f3f5f7;
-              border-left:5px solid #d9dde1;
-              padding-left:rem(28px);
-            }
-            .food-list {
-              .food-wrapper {
-                display: flex;
-                margin:0 rem(36px);
-                padding:rem(36px) 0;
-                border-bottom:1px solid rgba(7,17,27,.1);
-                &:last-child{
-                  border-bottom:none;
-                }
-                .food-pic {
-                  width:rem(128px);
-                  img{
-                    width:100%;
-                  }
-                }
-                .food-text {
-                  flex: 2;
-                  padding-left:rem(20px);
-                  .title{
-                    padding-top:rem(4px);
-                    font-size:rem(28px);
-                  }
-                  .text{
-                    color:rgb(147,153,159);
-                    margin:rem(16px) 0;
-                  }
-                  .rating{
-                    color:rgb(147,153,159);
-                  }
-                  .price{
-                    .now-price{
-                      color:rgb(240,20,20);
-                      font-weight:700;
-                      font-size:rem(28px);
-                    }
-                    .old-price{
-                      position: relative;
-                      color:rgb(147,153,159);
-                      font-size:rem(20px);
-                      margin-left:rem(16px);
-                      &:after{
-                        display: inline-block;
-                        position: absolute;
-                        content:'';
-                        left:0;
-                        top:rem(15px);
-                        width:100%;
-                        height:1px;
-                        background:rgb(147,153,159);
-                      }
-                    }
-                  }
-                }
-              }
+          .name {
+            margin: rem(4px) 0 rem(16px) 0;
+          }
+          .desc, .extra {
+            line-height: rem(20px);
+            font-size: rem(20px);
+            color: rgb(147, 153, 159);
+            margin-bottom: rem(16px);
+          }
+          .desc {
+
+          }
+          .extra {
+            .count {
+              margin-right: rem(24px);
             }
           }
+          .price {
+            font-weight: 700;
+            line-height: rem(48px);
+            .now {
+              margin-right: rem(16px);
+              font-size: rem(28px);
+              color: rgb(240, 20, 20);
+            }
+            .old {
+              text-decoration: line-through;
+              font-size: rem(20px);
+              color: rgb(147, 153, 159);
+            }
+          }
+
         }
       }
     }

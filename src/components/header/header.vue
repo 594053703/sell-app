@@ -316,6 +316,7 @@
             width:80%;
             margin:0 auto;
             .content{
+              display: inline-block;
               padding:0 rem(24px);
               font-size:rem(24px);
               line-height:rem(48px);
